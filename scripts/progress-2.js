@@ -15,7 +15,7 @@ window.onload = function() {
   const pieOuterRadius = pieWidth / 2
   const pieInnerRadius = (pieWidth / 2) - 20
 
-  const svg = d3.select('#cme .viz')
+  const svg = d3.select('#cme .dbviz')
                 .append('svg')
                   .attr('width', width)
                   .attr('height', height)
@@ -73,14 +73,53 @@ window.onload = function() {
    */
   function updateUi(data) {
     const general = data.cme_facets.filter(item => item.type == "General")[0]
-    const togo = general.required - general.earned
+    const togo = (general.required - general.earned).toFixed(1)
+    const decimalPlaces = 1
+    const decimalFactor = Math.pow(10, decimalPlaces)
 
-    $('.viz__count').text(general.earned);
-    $('.viz__tail .togo').html(togo + ' <span>credits to go</span>');
-    $('.viz__tail .required').text(general.required + ' required');
+
+    //$('.dbviz__count').html(general.earned + '<span>credits</span>');
+    $('.dbviz__tail .togo > .head').html(togo);
+    $('.dbviz__tail .required').text(general.required + ' required');
 
     updateProgressBar(general)
 
+    $('.dbviz__count > .head').animateNumber({ 
+      number: general.earned * decimalFactor,
+      numberStep: function(now, tween) {
+        let floored_number = Math.floor(now) / decimalFactor,
+            target = $(tween.elem);
+
+        if (decimalPlaces > 0) {
+          // force decimal places even if they are 0
+          floored_number = floored_number.toFixed(decimalPlaces);
+        }
+
+        target.text(floored_number);
+      }
+    }, 700)
+  }
+
+  /**
+   * TODO Not working
+   *
+   */
+  function animateCount(maxCount, selector, duration) {
+
+    let animationDuration = duration || 750;
+    const delay = animationDuration / (maxCount * 10)
+    let count = 0;
+    $elem = $(selector);
+
+    let interval = setInterval(function() {
+
+      if (count > maxCount) {
+        clearInterval(interval);
+      }
+
+      $elem.html(count.toFixed(1))
+      count += 0.1
+    }, delay)
   }
 
   /**
@@ -98,7 +137,7 @@ window.onload = function() {
   
   d3.json('./../data/cme-data-1.json', function(err, data) {
 
-    dataset = data[8] 
+    dataset = data[0] 
 
     updateUi(dataset)
 

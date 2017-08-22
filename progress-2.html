@@ -4,38 +4,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Pie Chart</title>
-    <style type="text/css" media="all">
-      body {
-        font-family: sans-serif;
-        color: #555;
-      }
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css" type="text/css" />
 
-      .label {
-        fill: #fff;
-      }
-
-    </style>
     <script src="https://d3js.org/d3.v4.min.js"></script>
   </head>
   <body>
 
-    <div id="cme">
-      <div class="viz__container">
-        
-        <h6 class="viz__head">Total</h6>
-        <div class="viz">
-          <h4 class="viz__count">0.0</h4>
-          <div>Credits</div>
-        </div>
-        <div class="viz__tail">
-           <div class="togo"> <span></span></div>
-           <div class="required"></div>
+    <div class="wrapper padding-top">
+      
+      <div id="cme">
+        <div class="dbviz__container">
+          
+          <h6 class="dbviz__title">Total</h6>
+          <div class="dbviz">
+            <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
+          </div>
+          <div class="dbviz__tail">
+             <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
+             <div class="required"></div>
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-animateNumber/0.0.14/jquery.animateNumber.min.js"></script>
     <script src="./scripts/progress-2.js" type="text/javascript" charset="utf-8"></script>
   </body>
 </html>

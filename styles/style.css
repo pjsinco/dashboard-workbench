@@ -1,0 +1,96 @@
+@import url('reset.css');
+
+html {
+  font-size: 16px;
+  line-height: 1;
+  text-size-adjust
+
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+}
+
+.wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.padding-top {
+  padding-top: 20px;
+}
+
+.dbviz {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.dbviz__count {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+.dbviz__count > .head {
+  font-weight: 600;
+  font-size: 5rem;
+}
+
+.dbviz__count > .tail {
+  display: block;
+  font-weight: 200;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+.dbviz__container {
+  max-width: 300px;
+}
+
+.dbviz__title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 200;
+  color: #888;
+  
+}
+
+.dbviz__tail {
+  text-align: center;
+}
+
+.dbviz__tail .togo {
+  margin-bottom: .5rem;
+}
+
+.dbviz__tail .togo > span {
+  display: block;
+}
+
+.dbviz__tail .togo > .head {
+  margin-bottom: .5rem;
+  font-size: 3rem;
+}
+
+.dbviz__tail .togo > .tail {
+  font-weight: 200;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.dbviz__tail .required {
+  font-weight: 200;
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: 1px;
+  color: #888;
+}
