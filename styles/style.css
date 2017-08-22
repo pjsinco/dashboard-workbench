@@ -51,6 +51,7 @@ body {
 
 .dbviz__container {
   max-width: 300px;
+  display: inline-block;
 }
 
 .dbviz__title {

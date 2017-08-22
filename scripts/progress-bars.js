@@ -137,7 +137,8 @@ window.onload = function() {
   
   d3.json('./../data/cme-data-1.json', function(err, data) {
 
-    dataset = data[0] 
+    dataset = data[4] 
+    console.dir(dataset);
 
     updateUi(dataset)
 

@@ -22,13 +22,13 @@
       {
         "desc": "Total Credits",
         "earned": 7.5,
-        "required": 120.0,
+        "required": 150.0,
         "type": "General"
       },
       {
         "desc": "Category 1-A",
         "earned": 1.5,
-        "required": 0.0,
+        "required": 50.0,
         "type": "Cat1A"
       },
       {
