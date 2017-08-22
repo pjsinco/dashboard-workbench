@@ -1,0 +1,20 @@
+{
+  "name": "dashboard-workbench",
+  "version": "0.0.1",
+  "description": "Work on UI for a dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "python -m SimpleHTTPServer 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pjsinco/dashboard-workbench.git"
+  },
+  "author": "Patrick Sinco <psinco@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pjsinco/dashboard-workbench/issues"
+  },
+  "homepage": "https://github.com/pjsinco/dashboard-workbench#readme"
+}
