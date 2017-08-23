@@ -5,36 +5,49 @@
     <meta name="viewport" content="width=device-width">
     <title>Pie Chart</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css" type="text/css" />
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
   </head>
   <body>
 
-    <div class="wrapper padding-top">
-      
-      <div id="cme">
-        <div class="dbviz__container">
-          <h6 class="dbviz__title">Total</h6>
-          <div class="dbviz">
-            <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
-          </div>
-          <div class="dbviz__tail">
-             <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
-             <div class="required"></div>
+    <div class="wrapper pt-4">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 mb-4" style="text-align: center;">
+             <select id="scenes" class="custom-select">
+               <option value="primary-2">Diagnostic Roentgenology</option>
+               <option value="primary-1">Radiology</option>
+             </select>
           </div>
         </div>
-
-        <div class="dbviz__container">
-          <h6 class="dbviz__title">Total</h6>
-          <div class="dbviz">
-            <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
-          </div>
-          <div class="dbviz__tail">
-             <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
-             <div class="required"></div>
-          </div>
-        </div>
+        <div class="row" id="cme">
+          <div class="col text-center">
+            <div class="dbviz__container" id="general">
+              <h6 class="dbviz__title">Total</h6>
+              <div class="dbviz">
+                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
+              </div>
+              <div class="dbviz__tail">
+                 <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
+                 <div class="required"></div>
+              </div>
+            </div>
+          </div> <!-- .col -->
+          <div class="col text-center">
+            <div class="dbviz__container" id="cert">
+              <h6 class="dbviz__title">Total</h6>
+              <div class="dbviz">
+                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
+              </div>
+              <div class="dbviz__tail">
+                 <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
+                 <div class="required"></div>
+              </div>
+            </div>
+          </div> <!-- .col -->
+        </div> <!-- .row #cme -->
       </div>
 
     </div>

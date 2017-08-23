@@ -21,9 +21,9 @@ window.onload = function() {
                   .attr('height', height)
 
   const g = svg.append('g')
-                .attr('transform', 
-                      'translate(' + width / 2+ ', ' + 
-                       height / 2+ ')')
+               .attr('transform', 
+                     'translate(' + width / 2+ ', ' + 
+                      height / 2+ ')')
   
   const tau = Math.PI * 2;
   const startAngle = 0
@@ -79,12 +79,12 @@ window.onload = function() {
 
 
     //$('.dbviz__count').html(general.earned + '<span>credits</span>');
-    $('.dbviz__tail .togo > .head').html(togo);
-    $('.dbviz__tail .required').text(general.required + ' required');
+    $('#general .dbviz__tail .togo > .head').html(togo);
+    $('#general .dbviz__tail .required').text(general.required + ' required');
 
     updateProgressBar(general)
 
-    $('.dbviz__count > .head').animateNumber({ 
+    $('#general .dbviz__count > .head').animateNumber({ 
       number: general.earned * decimalFactor,
       numberStep: function(now, tween) {
         let floored_number = Math.floor(now) / decimalFactor,
