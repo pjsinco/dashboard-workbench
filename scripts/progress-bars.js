@@ -14,19 +14,33 @@ window.onload = function() {
   const pieHeight = height
   const pieOuterRadius = pieWidth / 2
   const pieInnerRadius = (pieWidth / 2) - 20
-
-  const svg = d3.select('#cme .dbviz')
-                .append('svg')
-                  .attr('width', width)
-                  .attr('height', height)
-
-  const g = svg.append('g')
-               .attr('transform', 
-                     'translate(' + width / 2+ ', ' + 
-                      height / 2+ ')')
-  
   const tau = Math.PI * 2;
   const startAngle = 0
+
+  function setupDonut(donutId) {
+
+  }
+
+  const svgGeneral = d3.select('#cme #general .dbviz')
+    .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+
+  const gGeneral = svgGeneral.append('g')
+    .attr('transform', 
+          'translate(' + width / 2+ ', ' + 
+           height / 2+ ')')
+  
+  const svgPrimary = d3.select('#cme #primary .dbviz')
+    .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+
+  const gPrimary = svgPrimary.append('g')
+    .attr('transform', 
+          'translate(' + width / 2+ ', ' + 
+           height / 2+ ')')
+
 
   // Curried - it's ready to accept an object with an endAngle property
   // to compute the path of an arc
@@ -37,13 +51,23 @@ window.onload = function() {
     .startAngle(0)
 
   // Add the background arc, from 0 to 100% (tau)
-  const background = g.append('path')
+  const backgroundGeneral = gGeneral.append('path')
+    .datum({endAngle: tau})
+    .attr('fill', '#d0d0d0')
+    .attr('d', arc)
+
+  const backgroundPrimary = gPrimary.append('path')
     .datum({endAngle: tau})
     .attr('fill', '#d0d0d0')
     .attr('d', arc)
 
   // Start the foreground at 0
-  const foreground = g.append('path')
+  const foregroundGeneral = gGeneral.append('path')
+    .datum({endAngle: startAngle * tau})
+    .attr('fill', 'orange')
+    .attr('d', arc)
+
+  const foregroundPrimary = gPrimary.append('path')
     .datum({endAngle: startAngle * tau})
     .attr('fill', 'orange')
     .attr('d', arc)
@@ -67,25 +91,31 @@ window.onload = function() {
     
   }
 
+  function updateDonut(donutId, data) {
+
+  }
+
   /**
    * @param object data
    * @return
    */
   function updateUi(data) {
-    const general = data.cme_facets.filter(item => item.type == "General")[0]
-    const togo = (general.required - general.earned).toFixed(1)
+
+    const genTotal = data.cme_facets.filter(item => item.type == "General")[0]
+    let togo = (genTotal.required - genTotal.earned).toFixed(1)
+
     const decimalPlaces = 1
     const decimalFactor = Math.pow(10, decimalPlaces)
 
+    //$('.dbviz__count').html(genTotal.earned + '<span>credits</span>');
+    $('#general').find('.dbviz__title').text('Total');
+    $('#general').find('.dbviz__tail .togo > .head').html(togo);
+    $('#general').find('.dbviz__tail .required').text(genTotal.required + ' required');
 
-    //$('.dbviz__count').html(general.earned + '<span>credits</span>');
-    $('#general .dbviz__tail .togo > .head').html(togo);
-    $('#general .dbviz__tail .required').text(general.required + ' required');
+    updateProgressBar(genTotal)
 
-    updateProgressBar(general)
-
-    $('#general .dbviz__count > .head').animateNumber({ 
-      number: general.earned * decimalFactor,
+    $('#general').find('.dbviz__count > .head').animateNumber({ 
+      number: genTotal.earned * decimalFactor,
       numberStep: function(now, tween) {
         let floored_number = Math.floor(now) / decimalFactor,
             target = $(tween.elem);
@@ -98,6 +128,35 @@ window.onload = function() {
         target.text(floored_number);
       }
     }, 700)
+
+    const pri = data.cme_facets.filter(item => item.type == 'Primary')
+    const primaries = [pri[0]]
+
+    primaries.forEach(primary => {
+      togo = (primary.required - primary.earned).toFixed(1)
+
+      $('#primary').find('.dbviz__title').text(primary.desc);
+      $('#primary').find('.dbviz__tail .togo > .head').html(togo);
+      $('#primary').find('.dbviz__tail .required').text(primary.required + ' required');
+
+      updateProgressBar(primary)
+
+      $('#primary').find('.dbviz__count > .head').animateNumber({ 
+        number: primary.earned * decimalFactor,
+        numberStep: function(now, tween) {
+          let floored_number = Math.floor(now) / decimalFactor,
+              target = $(tween.elem);
+
+          if (decimalPlaces > 0) {
+            // force decimal places even if they are 0
+            floored_number = floored_number.toFixed(decimalPlaces);
+          }
+
+          target.text(floored_number);
+        }
+      }, 700)
+
+    })
   }
 
   /**
@@ -128,11 +187,23 @@ window.onload = function() {
    */
   function updateProgressBar(facet) {
 
-    foreground.transition()
-      .duration(750)
-      //.ease(d3.easeQuadOut)
-      //.ease(d3.easeLinear)
-      .attrTween('d', arcTween((facet.earned / facet.required) * tau))
+    if (facet.type === 'General') {
+      foregroundGeneral.transition()
+        .duration(750)
+        //.ease(d3.easeQuadOut)
+        //.ease(d3.easeLinear)
+        .attrTween('d', arcTween((facet.earned / facet.required) * tau))
+    } else if (facet.type === 'Primary') {
+      foregroundPrimary.transition()
+        .duration(750)
+        //.ease(d3.easeQuadOut)
+        //.ease(d3.easeLinear)
+        .attrTween('d', arcTween((facet.earned / facet.required) * tau))
+    }
+
+
+    
+
   }
   
   d3.json('./../data/cme-data-1.json', function(err, data) {
