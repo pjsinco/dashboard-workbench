@@ -1,0 +1,369 @@
+[
+  {
+    "aoa_id": "209685",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 59.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 25.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      }
+    ]
+  },
+  {
+    "aoa_id": "285494",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 72.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 41.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Otolaryngology",
+        "earned": 70.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "360379",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 93.0,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 13.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Otolaryngology & Facial Plastic Surgery",
+        "earned": 54.0,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Otolaryngic Allergy",
+            "earned": 6.0,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "217081",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 77.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 67.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Otorhinolaryngology",
+        "earned": 56.5,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      },
+      {
+        "desc": "Neuromusculoskeletal Medicine & OMM",
+        "earned": 12.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "431875",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 29.0,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 21.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Otorhinolaryngology",
+        "earned": 2.0,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Sleep Medicine",
+            "earned": 1.5,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Diagnostic Roentgenology",
+        "earned": 2.5,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "232257",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 55.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 37.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Diagnostic Radiology",
+        "earned": 25.0,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Body Imaging",
+            "earned": 14.0,
+            "required": 13.0
+          },
+          {
+            "desc": "Diagnostic Ultrasound",
+            "earned": 5.5,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Otolaryngology & Facial Plastic Surgery",
+        "earned": 5.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "446380",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 83.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 74.5,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Pediatrics",
+        "earned": 51.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      },
+      {
+        "desc": "Psychology",
+        "earned": 4.5,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      },
+      {
+        "desc": "Facial Plastic Surgery",
+        "earned": 7.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "368162",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 104.0,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 29.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Psychology",
+        "earned": 27.5,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Neurology & Psychiatry",
+            "earned": 18.5,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Roentgenology",
+        "earned": 9.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      },
+      {
+        "desc": "Otorhinolaryngology",
+        "earned": 64.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "202197",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 68.0,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 61.5,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Diagnostic Roentgenology",
+        "earned": 45.0,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Body Imaging",
+            "earned": 2.0,
+            "required": 13.0
+          },
+          {
+            "desc": "Radiation Therapy",
+            "earned": 42.0,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Neurology",
+        "earned": 3.0,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      },
+      {
+        "desc": "Emergency Medicine",
+        "earned": 3.5,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  },
+  {
+    "aoa_id": "285189",
+    "cme_facets": [
+      {
+        "desc": "Total Credits",
+        "earned": 91.5,
+        "required": 120.0,
+        "type": "General"
+      },
+      {
+        "desc": "Category 1-A",
+        "earned": 29.0,
+        "required": 0.0,
+        "type": "Cat1A"
+      },
+      {
+        "desc": "Diagnostic Radiology",
+        "earned": 37.0,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Diagnostic Ultrasound",
+            "earned": 5.0,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Roentgenology",
+        "earned": 4.5,
+        "required": 30.0,
+        "subs": [
+          {
+            "desc": "Vascular & Interventional Radiology",
+            "earned": 2.5,
+            "required": 13.0
+          },
+          {
+            "desc": "Nuclear Radiology",
+            "earned": 0.0,
+            "required": 13.0
+          }
+        ],
+        "type": "Primary"
+      },
+      {
+        "desc": "Facial Plastic Surgery",
+        "earned": 44.5,
+        "required": 30.0,
+        "subs": [],
+        "type": "Primary"
+      }
+    ]
+  }
+]
