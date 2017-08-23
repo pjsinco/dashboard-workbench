@@ -102,7 +102,7 @@ window.onload = function() {
   function updateUi(data) {
 
     const genTotal = data.cme_facets.filter(item => item.type == "General")[0]
-    let togo = (genTotal.required - genTotal.earned).toFixed(1)
+    let togo = Math.max((genTotal.required - genTotal.earned), 0).toFixed(1) 
 
     const decimalPlaces = 1
     const decimalFactor = Math.pow(10, decimalPlaces)
@@ -133,7 +133,7 @@ window.onload = function() {
     const primaries = [pri[0]]
 
     primaries.forEach(primary => {
-      togo = (primary.required - primary.earned).toFixed(1)
+      togo = Math.max((primary.required - primary.earned), 0).toFixed(1) 
 
       $('#primary').find('.dbviz__title').text(primary.desc);
       $('#primary').find('.dbviz__tail .togo > .head').html(togo);

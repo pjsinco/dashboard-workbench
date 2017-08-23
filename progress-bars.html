@@ -13,21 +13,26 @@
   <body>
 
     <div class="wrapper pt-4">
-      <div class="container-fluid">
+      <div class="container-fluid p-4" style="border: 1px solid #d0d0d0;">
+        <div class="row">
+          <div class="col mb-4">
+            <h2 class="text-center">CME credits</h2>
+          </div>
+        </div>
         <div class="row">
           <div class="col-md-12 mb-4" style="text-align: center;">
-             <select id="scenes" class="custom-select">
-               <option value="primary-1">Radiology</option>
-               <option value="primary-2">Diagnostic Roentgenology</option>
-             </select>
+             <!--<select id="scenes" class="custom-select">-->
+               <!--<option value="primary-1">Radiology</option>-->
+               <!--<option value="primary-2">Diagnostic Roentgenology</option>-->
+             <!--</select>-->
           </div>
         </div>
         <div class="row" id="cme">
-          <div class="col text-center">
+          <div class="col text-center p-4" style="">
             <div class="dbviz__container" id="general">
               <h6 class="dbviz__title"></h6>
               <div class="dbviz">
-                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
+                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">earned</span></h4>
               </div>
               <div class="dbviz__tail">
                  <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
@@ -35,11 +40,11 @@
               </div>
             </div>
           </div> <!-- .col -->
-          <div class="col text-center">
+          <div class="col text-center p-4" >
             <div class="dbviz__container" id="primary">
               <h6 class="dbviz__title"></h6>
               <div class="dbviz">
-                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">credits</span></h4>
+                <h4 class="dbviz__count"><span class="head">0.0</span> <span class="tail">earned</span></h4>
               </div>
               <div class="dbviz__tail">
                  <div class="togo"><span class="head"></span> <span class="tail">credits to go</span></div>
