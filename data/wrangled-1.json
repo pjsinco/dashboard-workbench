@@ -2,9 +2,9 @@
   "aoa_id": "269802",
   "general": {
     "earned": 67.0,
-    "cat1aEarned": 26.0,
+    "cat1aEarned": 26.0
   },
-  "primary": [
+  "primaries": [
     {
       "desc": "Radiology",
       "earned": 1.5,
