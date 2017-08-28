@@ -1,0 +1,31 @@
+{
+  "aoa_id": "269802",
+  "general": {
+    "earned": 67.0,
+    "cat1aEarned": 26.0,
+  },
+  "primary": [
+    {
+      "desc": "Radiology",
+      "earned": 1.5,
+      "required": 30.0,
+      "generalRequired": 120.0,
+      "cat1aRequired": 0.0,
+      "subs": [
+        {
+          "desc": "Radiation Therapy",
+          "earned": 0.0,
+          "required": 13.0
+        }
+      ]
+    },
+    {
+      "desc": "Diagnostic Roentgenology",
+      "earned": 33.0,
+      "required": 30.0,
+      "generalRequired": 120.0,
+      "cat1aRequired": 0.0,
+      "subs": []
+    }
+  ]
+}
