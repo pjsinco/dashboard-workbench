@@ -194,11 +194,15 @@ window.onload = function() {
    * @return
    */
   function setupUi(data) {
-
     //const genTotal = data.cme_facets.filter(item => item.type == "General")[0]
     const genTotal = data.general.earned;
 
+    // TODO grab a temp value
+    const primary = data.primaries[0]
+
     setupDonut('general', 'Total', data.general.earned, GENERAL_RECOMMENDATION)
+    setupDonut('primary', primary.desc, primary.earned, primary.required)
+  
 
     if (! data.primaries) {
   
