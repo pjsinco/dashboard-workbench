@@ -3,9 +3,10 @@
  *
  */
 
-window.onload = function() {
+//window.onload = function() {
 
   const GENERAL_RECOMMENDATION = 120.0
+  const COUNT_ANIMATION_DURATION = 700
 
   const decimalPlaces = 1
   const decimalFactor = Math.pow(10, decimalPlaces)
@@ -22,29 +23,6 @@ window.onload = function() {
   const tau = Math.PI * 2;
   const startAngle = 0
 
-  //const donuts = []
-
-//  const svgGeneral = d3.select('#cme #general .dbviz')
-//    .append('svg')
-//      .attr('width', width)
-//      .attr('height', height)
-//
-//  const gGeneral = svgGeneral.append('g')
-//    .attr('transform', 
-//          'translate(' + width / 2+ ', ' + 
-//           height / 2+ ')')
-//  
-  const svgPrimary = d3.select('#cme #primary .dbviz')
-    .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-
-  const gPrimary = svgPrimary.append('g')
-    .attr('transform', 
-          'translate(' + width / 2+ ', ' + 
-           height / 2+ ')')
-
-
   // Curried - it's ready to accept an object with an endAngle property
   // to compute the path of an arc
   const arc = d3.arc()
@@ -52,28 +30,6 @@ window.onload = function() {
     .outerRadius(pieOuterRadius)
     .cornerRadius(10)
     .startAngle(0)
-
-  // Add the background arc, from 0 to 100% (tau)
-  //const backgroundGeneral = gGeneral.append('path')
-    //.datum({endAngle: tau})
-    //.attr('fill', '#d0d0d0')
-    //.attr('d', arc)
-
-  const backgroundPrimary = gPrimary.append('path')
-    .datum({endAngle: tau})
-    .attr('fill', '#d0d0d0')
-    .attr('d', arc)
-
-  // Start the foreground at 0
-  //const foregroundGeneral = gGeneral.append('path')
-    //.datum({endAngle: startAngle * tau})
-    //.attr('fill', 'orange')
-    //.attr('d', arc)
-
-  const foregroundPrimary = gPrimary.append('path')
-    .datum({endAngle: startAngle * tau})
-    .attr('fill', 'orange')
-    .attr('d', arc)
 
   // Returns the tween for a transition's "d" attribute, transitioning any 
   // selected arcs from their current angle to the specified new angle
@@ -92,10 +48,6 @@ window.onload = function() {
   // These will be used to make the progress indicator
   function parseFacet(facet) {
     
-  }
-
-  function updateDonut(donutId, data) {
-
   }
 
   function setupDonut(donutId, donutDesc, earned, required) {
@@ -136,31 +88,21 @@ window.onload = function() {
              height / 2+ ')')
   
     const background = g.append('path')
+      .classed('background', true)
       .datum({endAngle: tau})
       .attr('fill', '#d0d0d0')
       .attr('d', arc)
 
     const foreground = g.append('path')
+      .classed('foreground', true)
       .datum({endAngle: startAngle * tau})
       .attr('fill', 'orange')
       .attr('d', arc)
 
     updateProgressBar({ type: 'General', earned, required }, foreground)
 
-    $(`#${donutId}`).find('.dbviz__count > .head').animateNumber({ 
-      number: earned * decimalFactor,
-      numberStep: function(now, tween) {
-        let floored_number = Math.floor(now) / decimalFactor,
-            target = $(tween.elem);
-
-        if (decimalPlaces > 0) {
-          // force decimal places even if they are 0
-          floored_number = floored_number.toFixed(decimalPlaces);
-        }
-
-        target.text(floored_number);
-      }
-    }, 700)
+    const countSelector = `${selector} .dbviz__count > .head`
+    animateCount(earned, countSelector, COUNT_ANIMATION_DURATION)
   }
 
   /**
@@ -176,15 +118,15 @@ window.onload = function() {
 
     const select = d3.select(target)
       .append('select')
-      .attr('id', 'primaries')
       .classed('custom-select', true)
+      .attr('id', 'select-primary')
       .on('change', callback)
 
     select.selectAll('option')
       .data(options)
       .enter()
       .append('option')
-        .attr('value', d => d.value)
+        .attr('value', d => d.text)
         .text(d => d.text)
   }
   
@@ -197,7 +139,7 @@ window.onload = function() {
     //const genTotal = data.cme_facets.filter(item => item.type == "General")[0]
     const genTotal = data.general.earned;
 
-    // TODO grab a temp value
+    // TODO we're just grabbing a temp value for now
     const primary = data.primaries[0]
 
     setupDonut('general', 'Total', data.general.earned, GENERAL_RECOMMENDATION)
@@ -217,126 +159,74 @@ window.onload = function() {
       // render Primary select
       renderSelect(
         '.cme-select',
-        () => { console.log('changed'); },
-        [ { value: "primary-1", text: "Radiology" },
-          { value: "primary-2", text: "Diagnostic Roentgenology" }, ]
+        handlePrimarySelectChange,
+        data.primaries.map(primary => {
+          return {
+            value: primary.desc,
+            text: primary.desc
+          }
+        })
       )
 
       // render Subs select
-      
 
     }
-
-
-
-//    const primaries = data
-//
-//    let togo = Math.max((genTotal.required - genTotal.earned), 0).toFixed(1) 
-//
-//    const decimalPlaces = 1
-//    const decimalFactor = Math.pow(10, decimalPlaces)
-//
-//    //$('.dbviz__count').html(genTotal.earned + '<span>credits</span>');
-//    $('#general').find('.dbviz__title').text('Total');
-//    $('#general').find('.dbviz__tail .togo > .head').html(togo);
-//    $('#general').find('.dbviz__tail .required').text(genTotal.required + ' required');
-//
-//    updateProgressBar(genTotal)
-//
-//    $('#general').find('.dbviz__count > .head').animateNumber({ 
-//      number: genTotal.earned * decimalFactor,
-//      numberStep: function(now, tween) {
-//        let floored_number = Math.floor(now) / decimalFactor,
-//            target = $(tween.elem);
-//
-//        if (decimalPlaces > 0) {
-//          // force decimal places even if they are 0
-//          floored_number = floored_number.toFixed(decimalPlaces);
-//        }
-//
-//        target.text(floored_number);
-//      }
-//    }, 700)
-//
-//    const pri = data.cme_facets.filter(item => item.type == 'Primary')
-//    const primaries = [pri[0]]
-//
-//    primaries.forEach(primary => {
-//      togo = Math.max((primary.required - primary.earned), 0).toFixed(1) 
-//
-//      $('#primary').find('.dbviz__title').text(primary.desc);
-//      $('#primary').find('.dbviz__tail .togo > .head').html(togo);
-//      $('#primary').find('.dbviz__tail .required').text(primary.required + ' required');
-//
-//      updateProgressBar(primary)
-//
-//      $('#primary').find('.dbviz__count > .head').animateNumber({ 
-//        number: primary.earned * decimalFactor,
-//        numberStep: function(now, tween) {
-//          let floored_number = Math.floor(now) / decimalFactor,
-//              target = $(tween.elem);
-//
-//          if (decimalPlaces > 0) {
-//            // force decimal places even if they are 0
-//            floored_number = floored_number.toFixed(decimalPlaces);
-//          }
-//
-//          target.text(floored_number);
-//        }
-//      }, 700)
-//
-//    })
   }
 
-  /**
-   * TODO Not working
-   *
-   */
   function animateCount(maxCount, selector, duration) {
 
-    let animationDuration = duration || 750;
-    const delay = animationDuration / (maxCount * 10)
-    let count = 0;
-    $elem = $(selector);
+    $(selector).animateNumber({ 
+      number: maxCount * decimalFactor,
+      numberStep: function(now, tween) {
+        let floored_number = Math.floor(now) / decimalFactor,
+            target = $(tween.elem);
 
-    let interval = setInterval(function() {
+        if (decimalPlaces > 0) {
+          // force decimal places even if they are 0
+          floored_number = floored_number.toFixed(decimalPlaces);
+        }
 
-      if (count > maxCount) {
-        clearInterval(interval);
+        target.text(floored_number);
       }
-
-      $elem.html(count.toFixed(1))
-      count += 0.1
-    }, delay)
+    }, duration)
   }
 
   function init() {
 
   }
 
+  function handlePrimarySelectChange() {
+
+    const newPrimary = d3.event.target.value;
+    const data = dataset.primaries.filter(primary => primary.desc === newPrimary)
+
+    if (!data || data.length === 0) {
+      throw new Error('Could not find that primary in the dataset')
+    }
+
+    const dataPrimary = data[0]
+
+    const donutId = d3.event.target.id.split('-')[1]
+    updateProgressBar(dataPrimary, d3.select(`#${donutId} svg path.foreground`))
+
+    const selector = `.dbviz__container#${donutId}`
+    animateCount(dataPrimary.earned, 
+                 selector + ' .dbviz__count > .head', 
+                 COUNT_ANIMATION_DURATION)
+
+    $(selector + ' .dbviz__title').text(dataPrimary.desc)
+    
+  }
+
   /**
    * @param object facet - required properties: earned, required
    * @return void
    */
-  function updateProgressBar(facet, foreground) {
-
-    if (facet.type === 'General') {
-      foreground.transition()
-        .duration(750)
-        //.ease(d3.easeQuadOut)
-        //.ease(d3.easeLinear)
-        .attrTween('d', arcTween((facet.earned / facet.required) * tau))
-    } else if (facet.type === 'Primary') {
-      foregroundPrimary.transition()
-        .duration(750)
-        //.ease(d3.easeQuadOut)
-        //.ease(d3.easeLinear)
-        .attrTween('d', arcTween((facet.earned / facet.required) * tau))
-    }
-
-
-    
-
+  function updateProgressBar(data, foreground) {
+    foreground.transition()
+      .duration(750)
+      .ease(d3.easeQuadOut)
+      .attrTween('d', arcTween((data.earned / data.required) * tau))
   }
   
   d3.json('./../data/wrangled-1.json', function(err, data) {
@@ -351,4 +241,4 @@ window.onload = function() {
 
   }); // end d3.json
   
-};
+//};
