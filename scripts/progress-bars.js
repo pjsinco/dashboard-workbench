@@ -142,19 +142,17 @@
     // TODO we're just grabbing a temp value for now
     const primary = data.primaries[0]
 
-    setupDonut('general', 'Total', data.general.earned, GENERAL_RECOMMENDATION)
+    setupDonut('general', 'General', data.general.earned, GENERAL_RECOMMENDATION)
     setupDonut('primary', primary.desc, primary.earned, primary.required)
   
 
     if (! data.primaries) {
   
-      // TODO ideal API
+      // TODO ideal API?
       //const general = new Progress(data.general.earned, GENERAL_RECOMMENDATION)
       //general.render()
 
     } else {
-               //<!--<option value="primary-1">Radiology</option>-->
-               //<!--<option value="primary-2">Diagnostic Roentgenology</option>-->
 
       // render Primary select
       renderSelect(
@@ -168,6 +166,7 @@
         })
       )
 
+      // TODO
       // render Subs select
 
     }
@@ -209,12 +208,14 @@
     const donutId = d3.event.target.id.split('-')[1]
     updateProgressBar(dataPrimary, d3.select(`#${donutId} svg path.foreground`))
 
+    // Update donut text
     const selector = `.dbviz__container#${donutId}`
     animateCount(dataPrimary.earned, 
                  selector + ' .dbviz__count > .head', 
                  COUNT_ANIMATION_DURATION)
-
     $(selector + ' .dbviz__title').text(dataPrimary.desc)
+    const togo = Math.max((dataPrimary.required - dataPrimary.earned), 0).toFixed(1) 
+    $(selector + ' .togo .head').text(togo)
     
   }
 
