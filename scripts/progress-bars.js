@@ -131,10 +131,10 @@
   function makeDonutData(type = '', title = '', earned = 0, required = 0, subs = null) {
 
     if (subs) {
-      return { type, earned, required, subs }
+      return { type, title, earned, required, subs }
     }
 
-    return { type, earned, required }
+    return { type, title, earned, required }
   }
 
   // Returns the tween for a transition's "d" attribute, transitioning any 
@@ -251,7 +251,7 @@
 
   function setScene(scene) {
     scene.data.forEach(item => {
-      setupDonut(item.type, scene.title, item.earned, item.required)
+      setupDonut(item.type, item.title, item.earned, item.required)
     })
   }
 
@@ -401,7 +401,7 @@ console.dir(scenes);
       .attrTween('d', arcTween((data.earned / data.required) * tau))
   }
   
-  d3.json('./../data/wrangled-2.json', function(err, data) {
+  d3.json('./../data/wrangled-1.json', function(err, data) {
 
     if (err) throw (err)
 
