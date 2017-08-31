@@ -15,6 +15,19 @@
   const height = 300
 
   let dataset
+  let currentPrimary
+
+  const scenes = []
+//    [
+//      { type: 'general', data: {earned: 0, required: 0} },
+//      { type: 'cat1a', data: {earned: 0, required: 0} },
+//      { type: 'primary', data: {earned: 0, required: 0}, subs: [] },
+//    ],
+//    [
+//      { type: 'general', data: {earned: 0, required: 0} },
+//      { type: 'cat1a', data: {earned: 0, required: 0} },
+//      { type: 'primary', data: {earned: 0, required: 0}, subs: [] },
+//    ],
   
   const pieWidth = width
   const pieHeight = height
@@ -30,6 +43,76 @@
     .outerRadius(pieOuterRadius)
     .cornerRadius(10)
     .startAngle(0)
+
+  /**
+   * Go through the dataset and set up all our scenes, which will container
+   * everythign we'll need for the viz.
+   *
+   * @return void
+   */
+  function setupScenes(dataset) {
+
+    if (dataset.primaries.length === 0) {
+      let donutData = makeDonutData('general', 
+                                    'General', 
+                                    dataset.general.earned, 
+                                    GENERAL_RECOMMENDATION);
+      scenes.push([ donutData ]);
+
+    } else {
+
+      dataset.primaries.forEach(primary => {
+
+        let scene = processPrimary(primary, 
+                                   dataset.general.earned, 
+                                   dataset.general.cat1aEarned)
+
+        scenes.push(scene);
+
+      });
+    }
+  }
+
+  function processPrimary(primary, generalEarned = 0.0, cat1aEarned = 0.0) {
+
+    const scene = []
+
+    // General
+    scene.push(makeDonutData('general',
+                              'General', 
+                              generalEarned,
+                              primary.generalRequired));
+
+    // Cat1A
+    if (primary.cat1aRequired > 0) {
+      scene.push(makeDonutData('cat1a',
+                                'AOA Category 1-A', 
+                                cat1aEarned,
+                                primary.cat1aRequired));
+    }
+
+    const subs = primary.subs.map(sub => {
+      return makeDonutData('sub', sub.desc, sub.earned, sub.required)
+    });
+
+    // Primary and subs
+    scene.push(makeDonutData('primary',
+                              primary.desc,
+                              primary.earned,
+                              primary.required,
+                              subs ? subs: null));
+
+    return scene;
+  }
+
+  function makeDonutData(type = '', title = '', earned = 0, required = 0, subs = null) {
+
+    if (subs) {
+      return { type, title, earned, required, subs }
+    }
+
+    return { type, title, earned, required }
+  }
 
   // Returns the tween for a transition's "d" attribute, transitioning any 
   // selected arcs from their current angle to the specified new angle
@@ -121,6 +204,7 @@
     const select = d3.select(target)
       .insert('select', ':first-child')
       .classed('custom-select', true)
+      .classed('mb-4', true)
       .attr('id', selectId)
       .on('change', callback)
 
@@ -136,12 +220,29 @@
     return primary.subs.length > 0
   }
 
+  function updateUi(data) {
+
+  }
+
+  // TODO temporary name
+  function setupUiFromScene(scene) {
+
+    //scenes.forEach(scene => {
+
+      scene.forEach(item => {
+        setupDonut(item.type, item.title, item.earned, item.required)
+      })
+
+    //});
+
+  }
+
   /**
    * @param object data
    * @return
    */
   function setupUi(data) {
-    //const genTotal = data.cme_facets.filter(item => item.type == "General")[0]
+
     const genTotal = data.general.earned;
 
     // TODO we're just grabbing a temp value for now
@@ -254,15 +355,25 @@
       .attrTween('d', arcTween((data.earned / data.required) * tau))
   }
   
-  d3.json('./../data/wrangled-1.json', function(err, data) {
+  d3.json('./../data/wrangled-2.json', function(err, data) {
 
     if (err) throw (err)
 
     dataset = data;
     init();
 
-    console.dir(dataset);
-    setupUi(dataset)
+console.dir(dataset);
+
+    setupScenes(dataset)
+
+console.dir(scenes);
+
+    setupUiFromScene(scenes[0])
+    //updateUi(scenes[0])
+
+    //renderScene(scenes[0])
+
+    //setupUi(dataset)
 
   }); // end d3.json
   
