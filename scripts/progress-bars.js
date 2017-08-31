@@ -18,16 +18,35 @@
   let currentPrimary
 
   const scenes = []
-//    [
-//      { type: 'general', data: {earned: 0, required: 0} },
-//      { type: 'cat1a', data: {earned: 0, required: 0} },
-//      { type: 'primary', data: {earned: 0, required: 0}, subs: [] },
-//    ],
-//    [
-//      { type: 'general', data: {earned: 0, required: 0} },
-//      { type: 'cat1a', data: {earned: 0, required: 0} },
-//      { type: 'primary', data: {earned: 0, required: 0}, subs: [] },
-//    ],
+  // Example
+  // [
+  //    {
+  //      title: "General",
+  //      data: [
+  //        { type: 'general', earned: 0, required: 0 },
+  //      ]
+  //    },
+  // ]
+  //
+  // Example
+  // [
+  //    {
+  //      title: "Radiology",
+  //      data: [
+  //        { type: 'general', earned: 0, required: 0 },
+  //        { type: 'cat1a', earned: 0, required: 0 },
+  //        { type: 'primary', earned: 0, required: 0, subs: [] },
+  //      ],
+  //    },
+  //    {
+  //      title: "Diagnostic Roentgenology",
+  //      data: [
+  //        { type: 'general', earned: 0, required: 0 },
+  //        { type: 'cat1a', earned: 0, required: 0 },
+  //        { type: 'primary', earned: 0, required: 0, subs: [] },
+  //      ]
+  //    },
+  // ];
   
   const pieWidth = width
   const pieHeight = height
@@ -53,11 +72,17 @@
   function setupScenes(dataset) {
 
     if (dataset.primaries.length === 0) {
+
+      const title = 'General'
+
       let donutData = makeDonutData('general', 
-                                    'General', 
+                                    title, 
                                     dataset.general.earned, 
                                     GENERAL_RECOMMENDATION);
-      scenes.push([ donutData ]);
+
+      scenes.push({ title, data: [donutData] });
+
+      return; // not needed, but being explicit for the time being
 
     } else {
 
@@ -66,9 +91,7 @@
         let scene = processPrimary(primary, 
                                    dataset.general.earned, 
                                    dataset.general.cat1aEarned)
-
-        scenes.push(scene);
-
+        scenes.push({ title: primary.desc, data: scene });
       });
     }
   }
@@ -108,10 +131,10 @@
   function makeDonutData(type = '', title = '', earned = 0, required = 0, subs = null) {
 
     if (subs) {
-      return { type, title, earned, required, subs }
+      return { type, earned, required, subs }
     }
 
-    return { type, title, earned, required }
+    return { type, earned, required }
   }
 
   // Returns the tween for a transition's "d" attribute, transitioning any 
@@ -227,8 +250,8 @@
   }
 
   function setScene(scene) {
-    scene.forEach(item => {
-      setupDonut(item.type, item.title, item.earned, item.required)
+    scene.data.forEach(item => {
+      setupDonut(item.type, scene.title, item.earned, item.required)
     })
   }
 
@@ -311,10 +334,24 @@
     }, duration)
   }
 
-  function init() {
-console.dir(dataset);
+  function init(data) {
 
-    setupScenes(dataset)
+console.dir(data);
+
+    setupScenes(data)
+
+//    renderSelect(
+//      '.cme-select',
+//      'select-primary',
+//      () => { console.log('select-change') },
+//      data.primaries.map(primary => {
+//        return {
+//          value: primary.desc,
+//          text: primary.desc
+//        }
+//      })
+//    )
+
     setScene(scenes[0])
 
 console.dir(scenes);
@@ -331,25 +368,26 @@ console.dir(scenes);
   function handlePrimarySelectChange() {
 
     const newPrimary = d3.event.target.value;
-    const data = dataset.primaries.filter(primary => primary.desc === newPrimary)
+    //const data = scenes.filter(scene => scene.filterprimary.title === newPrimary)
+    //console.dir(data);
 
-    if (!data || data.length === 0) {
-      throw new Error('Could not find that primary in the dataset')
-    }
-
-    const dataPrimary = data[0]
-
-    const donutElemId = d3.event.target.id.split('-')[1]
-    updateProgressBar(dataPrimary, d3.select(`#${donutElemId} svg path.foreground`))
-
-    // Update donut text
-    const selector = `.dbviz__container#${donutElemId}`
-    animateCount(dataPrimary.earned, 
-                 selector + ' .dbviz__count > .head', 
-                 COUNT_ANIMATION_DURATION)
-    $(selector + ' .dbviz__title').text(dataPrimary.desc)
-    const togo = Math.max((dataPrimary.required - dataPrimary.earned), 0).toFixed(1) 
-    $(selector + ' .togo .head').text(togo)
+//    if (!data || data.length === 0) {
+//      throw new Error('Could not find that primary in the dataset')
+//    }
+//
+//    const dataPrimary = data[0]
+//
+//    const donutElemId = d3.event.target.id.split('-')[1]
+//    updateProgressBar(dataPrimary, d3.select(`#${donutElemId} svg path.foreground`))
+//
+//    // Update donut text
+//    const selector = `.dbviz__container#${donutElemId}`
+//    animateCount(dataPrimary.earned, 
+//                 selector + ' .dbviz__count > .head', 
+//                 COUNT_ANIMATION_DURATION)
+//    $(selector + ' .dbviz__title').text(dataPrimary.desc)
+//    const togo = Math.max((dataPrimary.required - dataPrimary.earned), 0).toFixed(1) 
+//    $(selector + ' .togo .head').text(togo)
   }
 
   /**
