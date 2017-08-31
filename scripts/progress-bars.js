@@ -143,7 +143,9 @@
             <div class="togo">
               <span class="head">${togo}</span> <span class="tail">credits to go</span>
             </div>
-            <div class="required">${required} required</div>
+            <div class="required">
+              ${required} required <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </div>
           </div>
         </div>
       </div> <!-- .col -->
@@ -224,17 +226,10 @@
 
   }
 
-  // TODO temporary name
-  function setupUiFromScene(scene) {
-
-    //scenes.forEach(scene => {
-
-      scene.forEach(item => {
-        setupDonut(item.type, item.title, item.earned, item.required)
-      })
-
-    //});
-
+  function setScene(scene) {
+    scene.forEach(item => {
+      setupDonut(item.type, item.title, item.earned, item.required)
+    })
   }
 
   /**
@@ -317,6 +312,19 @@
   }
 
   function init() {
+console.dir(dataset);
+
+    setupScenes(dataset)
+    setScene(scenes[0])
+
+console.dir(scenes);
+
+    //updateUi(scenes[0])
+
+    //renderScene(scenes[0])
+
+    //setupUi(dataset)
+
 
   }
 
@@ -360,20 +368,7 @@
     if (err) throw (err)
 
     dataset = data;
-    init();
-
-console.dir(dataset);
-
-    setupScenes(dataset)
-
-console.dir(scenes);
-
-    setupUiFromScene(scenes[0])
-    //updateUi(scenes[0])
-
-    //renderScene(scenes[0])
-
-    //setupUi(dataset)
+    init(dataset);
 
   }); // end d3.json
   
