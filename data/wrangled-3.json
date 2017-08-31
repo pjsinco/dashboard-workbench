@@ -20,10 +20,10 @@
       ]
     },
     {
-      "desc": "Diagnostic Roentgenology",
+      "desc": "Family Medicine",
       "earned": 23.0,
       "required": 30.0,
-      "generalRequired": 120.0,
+      "generalRequired": 150.0,
       "cat1aRequired": 30.0,
       "subs": []
     }

@@ -4,7 +4,7 @@
   "description": "Work on UI for a dashboard",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "python -m SimpleHTTPServer 8000"
   },
   "repository": {
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pjsinco/dashboard-workbench/issues"
   },
-  "homepage": "https://github.com/pjsinco/dashboard-workbench#readme"
+  "homepage": "https://github.com/pjsinco/dashboard-workbench#readme",
+  "devDependencies": {
+    "mocha": "^3.5.0"
+  }
 }

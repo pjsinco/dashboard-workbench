@@ -383,11 +383,15 @@ console.dir(scenes);
   function handlePrimarySelectChange() {
 
     const newScene = scenes.filter(scene => scene.title === d3.event.target.value)[0]
-
     if (!newScene) return;
 
     // TODO
     // 1. Update general
+    const donutElemId = d3.event.target.id.split('-')[1]
+    const generalData = newScene.data.filter(item => item.type === 'general')[0]
+    if (generalData) {
+      updateProgressBar(generalData, d3.select(`#${donutElemId} svg path.foreground`))
+    }
     
     
 
@@ -404,6 +408,7 @@ console.dir(scenes);
       $('#cat1a').parent().remove()
     }
     
+    // TODO
     // 3. Update primary
 
 
