@@ -43,21 +43,14 @@
     }
   }
 
-
-  // Get 2 data values from a facet: earned, required.
-  // These will be used to make the progress indicator
-  function parseFacet(facet) {
-    
-  }
-
-  function setupDonut(donutId, donutDesc, earned, required) {
+  function setupDonut(donutElemId, donutTitle, earned, required) {
 
     const togo = Math.max((required - earned), 0).toFixed(1) 
 
     const html = `
       <div class="col text-center p-4" style="">
-        <div class="dbviz__container" id="${donutId}">
-          <h6 class="dbviz__title">${donutDesc}</h6>
+        <div class="dbviz__container" id="${donutElemId}">
+          ${donutTitle ? '<h6 class="dbviz__title">' + donutTitle + '</h6>': ''}
           <div class="dbviz">
             <h4 class="dbviz__count">
               <span class="head">0.0</span> <span class="tail">earned</span>
@@ -75,7 +68,7 @@
 
     $('#cme').append(html)
 
-    const selector = `#cme #${donutId} .dbviz`
+    const selector = `#cme #${donutElemId} .dbviz`
 
     const svg = d3.select(selector)
       .append('svg')
@@ -106,7 +99,8 @@
   }
 
   /**
-   * @param target string CSS selector of targeted element
+   * @param string target CSS selector of targeted element
+   * @param string selectId The ID to apply to the select element
    * @param callback function Callback function to handle 'change' event
    * @param array options An array of { value, text } objects
    *
@@ -114,12 +108,20 @@
    *
    * TODO Do we need to use d3 for this? Maybe can use JS or JQuery instead
    */
-  function renderSelect(target, callback, options) {
+  function renderSelect(target, selectId, callback, options) {
+
+
+//<div class="mb-4 specialty-select" style="text-align: center;">
+  //<select class="form-control form-control-sm" id="select-primary">
+    //<option value="Radiology">Radiology</option>
+    //<option value="Diagnostic Roentgenology">Diagnostic Roentgenology</option>
+  //</select>
+//</div>
 
     const select = d3.select(target)
-      .append('select')
+      .insert('select', ':first-child')
       .classed('custom-select', true)
-      .attr('id', 'select-primary')
+      .attr('id', selectId)
       .on('change', callback)
 
     select.selectAll('option')
@@ -129,7 +131,10 @@
         .attr('value', d => d.text)
         .text(d => d.text)
   }
-  
+
+  function hasSubs(primary) {
+    return primary.subs.length > 0
+  }
 
   /**
    * @param object data
@@ -143,8 +148,9 @@
     const primary = data.primaries[0]
 
     setupDonut('general', 'General', data.general.earned, GENERAL_RECOMMENDATION)
-    setupDonut('primary', primary.desc, primary.earned, primary.required)
-  
+
+    const donutTitle = hasSubs(primary) ? null : primary.desc
+    setupDonut('primary', donutTitle, primary.earned, primary.required)
 
     if (! data.primaries) {
   
@@ -157,6 +163,7 @@
       // render Primary select
       renderSelect(
         '.cme-select',
+        'select-primary',
         handlePrimarySelectChange,
         data.primaries.map(primary => {
           return {
@@ -168,7 +175,25 @@
 
       // TODO
       // render Subs select
+      if (hasSubs(primary)) {
+        const subSelectItems = 
+          [
+            { value: primary.desc, text: primary.desc }, 
+            ...primary.subs.map(sub => { 
+              return { 
+                value: sub.desc, 
+                text: sub.desc } 
+              }
+            )
+          ]
 
+        renderSelect(
+          '#primary',
+          'select-sub',
+          () => console.log('sub change'),
+          subSelectItems
+        )
+      }
     }
   }
 
@@ -205,18 +230,17 @@
 
     const dataPrimary = data[0]
 
-    const donutId = d3.event.target.id.split('-')[1]
-    updateProgressBar(dataPrimary, d3.select(`#${donutId} svg path.foreground`))
+    const donutElemId = d3.event.target.id.split('-')[1]
+    updateProgressBar(dataPrimary, d3.select(`#${donutElemId} svg path.foreground`))
 
     // Update donut text
-    const selector = `.dbviz__container#${donutId}`
+    const selector = `.dbviz__container#${donutElemId}`
     animateCount(dataPrimary.earned, 
                  selector + ' .dbviz__count > .head', 
                  COUNT_ANIMATION_DURATION)
     $(selector + ' .dbviz__title').text(dataPrimary.desc)
     const togo = Math.max((dataPrimary.required - dataPrimary.earned), 0).toFixed(1) 
     $(selector + ' .togo .head').text(togo)
-    
   }
 
   /**
