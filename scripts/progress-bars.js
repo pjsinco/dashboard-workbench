@@ -149,7 +149,7 @@
     }
   }
 
-  function setupDonut(donutElemId, donutTitle, earned, required) {
+  function setupDonut(donutElemId, donutTitle, earned, required, insertInMiddle = false) {
 
     const togo = Math.max((required - earned), 0).toFixed(1) 
 
@@ -174,7 +174,11 @@
       </div> <!-- .col -->
     `
 
-    $('#cme').append(html)
+    if (! insertInMiddle) {
+      $('#cme').append(html)
+    } else {
+      $(html).insertAfter('#cme > div:first-child')
+    }
 
     const selector = `#cme #${donutElemId} .dbviz`
 
@@ -245,14 +249,16 @@
     return primary.subs.length > 0
   }
 
-  function updateUi(data) {
-
-  }
-
   function setScene(scene) {
     scene.data.forEach(item => {
       setupDonut(item.type, item.title, item.earned, item.required)
     })
+  }
+
+  function flipScene(newScene) {
+
+    console.dir(newScene);
+
   }
 
   /**
@@ -340,17 +346,17 @@ console.dir(data);
 
     setupScenes(data)
 
-//    renderSelect(
-//      '.cme-select',
-//      'select-primary',
-//      () => { console.log('select-change') },
-//      data.primaries.map(primary => {
-//        return {
-//          value: primary.desc,
-//          text: primary.desc
-//        }
-//      })
-//    )
+    renderSelect(
+      '.cme-select',
+      'select-primary',
+      handlePrimarySelectChange,
+      data.primaries.map(primary => {
+        return {
+          value: primary.desc,
+          text: primary.desc
+        }
+      })
+    )
 
     setScene(scenes[0])
 
@@ -365,9 +371,42 @@ console.dir(scenes);
 
   }
 
+  /**
+   * Determine if a scene has an item of a certain type
+   * @param string type
+   * @param object scene
+   */
+  function sceneHasType(type, scene) {
+    return scene.data.filter(item => item.type === type).length > 0;
+  }
+
   function handlePrimarySelectChange() {
 
-    const newPrimary = d3.event.target.value;
+    const newScene = scenes.filter(scene => scene.title === d3.event.target.value)[0]
+
+    if (!newScene) return;
+
+    // TODO
+    // 1. Update general
+    
+    
+
+    // 2. Add/remove/update cat1a
+    const newSceneHasCat1a = sceneHasType('cat1a', newScene);
+    const alreadyHaveCat1aElem = $('#cat1a').length > 0;
+    if (newSceneHasCat1a && ! alreadyHaveCat1aElem) {
+      const cat1a = newScene.data.filter(item => item.type === 'cat1a')[0]
+      // fetch cat1a data and setup donut
+      if (cat1a) {
+        setupDonut(cat1a.type, cat1a.title, cat1a.earned, cat1a.required, true)
+      }
+    } else if (! newSceneHasCat1a && alreadyHaveCat1aElem) {
+      $('#cat1a').parent().remove()
+    }
+    
+    // 3. Update primary
+
+
     //const data = scenes.filter(scene => scene.filterprimary.title === newPrimary)
     //console.dir(data);
 
@@ -401,7 +440,7 @@ console.dir(scenes);
       .attrTween('d', arcTween((data.earned / data.required) * tau))
   }
   
-  d3.json('./../data/wrangled-1.json', function(err, data) {
+  d3.json('./../data/wrangled-3.json', function(err, data) {
 
     if (err) throw (err)
 
