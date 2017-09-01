@@ -151,7 +151,7 @@
 
   function setupDonut(donutElemId, donutTitle, earned, required, insertInMiddle = false) {
 
-    const togo = Math.max((required - earned), 0).toFixed(1) 
+    const creditsTogo = togo({ earned, required });
 
     const html = `
       <div class="col text-center p-4" style="">
@@ -163,11 +163,11 @@
             </h4>
           </div>
           <div class="dbviz__tail">
-            <div class="togo">
-              <span class="head">${togo}</span> <span class="tail">credits to go</span>
+            <div class="creditsTogo">
+              <span class="head">${creditsTogo}</span> <span class="tail">credits to go</span>
             </div>
             <div class="required">
-              ${required} required <i class="fa fa-question-circle" aria-hidden="true"></i>
+              <span class="head">${required}</span> required <i class="fa fa-question-circle" aria-hidden="true"></i>
             </div>
           </div>
         </div>
@@ -342,8 +342,6 @@
 
   function init(data) {
 
-console.dir(data);
-
     setupScenes(data)
 
     renderSelect(
@@ -359,16 +357,9 @@ console.dir(data);
     )
 
     setScene(scenes[0])
-
-console.dir(scenes);
-
     //updateUi(scenes[0])
-
     //renderScene(scenes[0])
-
     //setupUi(dataset)
-
-
   }
 
   /**
@@ -380,20 +371,37 @@ console.dir(scenes);
     return scene.data.filter(item => item.type === type).length > 0;
   }
 
+  /**
+   * Calculate credits needed to fulfill a requirement.
+   *
+   * @param object data - required properties: earned, required
+   */
+  function togo({ required, earned }) {
+    return Math.max((required - earned), 0).toFixed(1);
+  }
+
   function handlePrimarySelectChange() {
 
     const newScene = scenes.filter(scene => scene.title === d3.event.target.value)[0]
     if (!newScene) return;
 
+    const donutElemId = d3.event.target.id.split('-')[1];
+    //const selector = `.dbviz__container#${donutElemId}`
+
+    // TODO Refactor later. For now, we're working out this process step by step.
+
     // TODO
     // 1. Update general
-    const donutElemId = d3.event.target.id.split('-')[1]
-    const generalData = newScene.data.filter(item => item.type === 'general')[0]
-    if (generalData) {
-      updateProgressBar(generalData, d3.select(`#${donutElemId} svg path.foreground`))
+    const general = newScene.data.filter(item => item.type === 'general')[0];
+    if (general) {
+      updateProgressBar(general, d3.select(`#general svg path.foreground`));
     }
-    
-    
+    animateCount(general.earned, 
+                 `#general .dbviz__count > .head`,
+                 COUNT_ANIMATION_DURATION);
+    const generalTogo = togo(general);
+    $('#general .creditsTogo .head').text(generalTogo);
+    $('#general .required .head').text(general.required);
 
     // 2. Add/remove/update cat1a
     const newSceneHasCat1a = sceneHasType('cat1a', newScene);
@@ -410,6 +418,16 @@ console.dir(scenes);
     
     // TODO
     // 3. Update primary
+    $(`#primary .dbviz__title`).text(newScene.title)
+    const primary = newScene.data.filter(item => item.type === 'primary')[0];
+    if (primary) {
+      updateProgressBar(primary, d3.select(`#primary svg path.foreground`));
+    }
+    animateCount(primary.earned, 
+                 `#primary .dbviz__count > .head`,
+                 COUNT_ANIMATION_DURATION);
+    $('#primary .creditsTogo .head').text(togo(primary));
+    $('#primary .required .head').text(primary.required);
 
 
     //const data = scenes.filter(scene => scene.filterprimary.title === newPrimary)
@@ -438,14 +456,20 @@ console.dir(scenes);
    * @param object facet - required properties: earned, required
    * @return void
    */
-  function updateProgressBar(data, foreground) {
+  function updateProgressBar({ earned, required }, foreground) {
+    
+    // Reset donut to 0.0, so it always sweeps forward
+    foreground
+      .datum({endAngle: startAngle * tau})
+      .attr('d', arc);
+
     foreground.transition()
       .duration(750)
       .ease(d3.easeQuadOut)
-      .attrTween('d', arcTween((data.earned / data.required) * tau))
+      .attrTween('d', arcTween((earned / required) * tau));
   }
   
-  d3.json('./../data/wrangled-3.json', function(err, data) {
+  d3.json('./../data/wrangled-2.json', function(err, data) {
 
     if (err) throw (err)
 
