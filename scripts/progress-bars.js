@@ -153,6 +153,14 @@
 
     const creditsTogo = togo({ earned, required });
 
+    // TODO improve
+    let type
+    if (donutElemId === 'cat1a') {
+      type = 'Cat. 1-A'
+    } else if (donutElemId === 'primary') {
+      type = 'specialty'
+    }
+
     const html = `
       <div class="col text-center p-4" style="">
         <div class="dbviz__container" id="${donutElemId}">
@@ -164,7 +172,7 @@
           </div>
           <div class="dbviz__tail">
             <div class="creditsTogo">
-              <span class="head">${creditsTogo}</span> <span class="tail">credits to go</span>
+              <span class="head">${creditsTogo}</span> <span class="tail">${type ? type + ' ' : ''}credits to go</span>
             </div>
             <div class="required">
               <span class="head">${required}</span> required <i class="fa fa-question-circle" aria-hidden="true"></i>
@@ -230,8 +238,17 @@
   //</select>
 //</div>
 
-    const select = d3.select(target)
-      .insert('select', ':first-child')
+    const group = d3.select(target)
+      .insert('div', ':first-child')
+      .classed('form-group', true)
+
+    group.append('label')
+      .classed('mr-sm-2', true)
+      .classed('text-secondary', true)
+      .attr('style', 'transform: translateY(-50%); line-height: 1.1;')
+      .text('Show progress for your ');
+
+    const select = group.append('select')
       .classed('custom-select', true)
       .classed('mb-4', true)
       .attr('id', selectId)
@@ -243,6 +260,12 @@
       .append('option')
         .attr('value', d => d.text)
         .text(d => d.text)
+
+    group.append('label')
+      .classed('ml-sm-2', true)
+      .classed('text-secondary', true)
+      .attr('style', 'transform: translateY(-50%); line-height: 1.1;')
+      .text('primary certification');
   }
 
   function hasSubs(primary) {
@@ -469,7 +492,7 @@
       .attrTween('d', arcTween((earned / required) * tau));
   }
   
-  d3.json('./../data/wrangled-2.json', function(err, data) {
+  d3.json('./../data/wrangled-3.json', function(err, data) {
 
     if (err) throw (err)
 

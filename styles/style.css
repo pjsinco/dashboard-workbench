@@ -98,7 +98,7 @@ body {
   color: #888;
 }
 
-#cme > .col:first-of-type:after {
+#cme > .col:not(:last-child):after {
   content: "";
   position: absolute;
   right: 0;
