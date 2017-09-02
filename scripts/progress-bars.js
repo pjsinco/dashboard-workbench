@@ -65,7 +65,7 @@
 
   /**
    * Go through the dataset and set up all our scenes, which will container
-   * everythign we'll need for the viz.
+   * everything we'll need for the viz.
    *
    * @return void
    */
@@ -82,8 +82,6 @@
 
       scenes.push({ title, data: [donutData] });
 
-      return; // not needed, but being explicit for the time being
-
     } else {
 
       dataset.primaries.forEach(primary => {
@@ -94,6 +92,8 @@
         scenes.push({ title: primary.desc, data: scene });
       });
     }
+
+    return; // not needed, but being explicit for the time being
   }
 
   function processPrimary(primary, generalEarned = 0.0, cat1aEarned = 0.0) {
@@ -149,7 +149,8 @@
     }
   }
 
-  function setupDonut(donutElemId, donutTitle, earned, required, insertInMiddle = false) {
+  function setupDonut({ title, type: donutElemId, earned, required, subs }, 
+                      insertInMiddle = false) {
 
     const creditsTogo = togo({ earned, required });
 
@@ -164,7 +165,7 @@
     const html = `
       <div class="col text-center p-4" style="">
         <div class="dbviz__container" id="${donutElemId}">
-          ${donutTitle ? '<h6 class="dbviz__title">' + donutTitle + '</h6>': ''}
+          ${subs ? '<div id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
           <div class="dbviz">
             <h4 class="dbviz__count">
               <span class="head">0.0</span> <span class="tail">earned</span>
@@ -186,6 +187,26 @@
       $('#cme').append(html)
     } else {
       $(html).insertAfter('#cme > div:first-child')
+    }
+  
+    if (subs) {
+      const subSelectItems = [
+        { value: title, text: title },
+        ...subs.map(sub => {
+          return {
+            value: sub.title,
+            text: sub.title,
+          }
+        })
+      ];
+
+      renderSubSelect(
+        '#subSelect',
+        'select-sub',
+        //handleSubSelectChange,
+        () => console.log('sub-select-change'),
+        subSelectItems
+      );
     }
 
     const selector = `#cme #${donutElemId} .dbviz`
@@ -212,10 +233,10 @@
       .attr('fill', 'orange')
       .attr('d', arc)
 
-    updateProgressBar({ type: 'General', earned, required }, foreground)
-
+    updateProgressBar({ earned, required }, foreground)
     const countSelector = `${selector} .dbviz__count > .head`
     animateCount(earned, countSelector, COUNT_ANIMATION_DURATION)
+
   }
 
   /**
@@ -228,8 +249,7 @@
    *
    * TODO Do we need to use d3 for this? Maybe can use JS or JQuery instead
    */
-  function renderSelect(target, selectId, callback, options) {
-
+  function renderPrimarySelect(target, selectId, callback, options) {
 
 //<div class="mb-4 specialty-select" style="text-align: center;">
   //<select class="form-control form-control-sm" id="select-primary">
@@ -246,7 +266,7 @@
       .classed('mr-sm-2', true)
       .classed('text-secondary', true)
       .attr('style', 'transform: translateY(-50%); line-height: 1.1;')
-      .text('Show progress for your ');
+      .text('Show progress for your');
 
     const select = group.append('select')
       .classed('custom-select', true)
@@ -262,88 +282,104 @@
         .text(d => d.text)
 
     group.append('label')
-      .classed('ml-sm-2', true)
-      .classed('text-secondary', true)
+      .classed('ml-sm-2 text-secondary', true)
       .attr('style', 'transform: translateY(-50%); line-height: 1.1;')
       .text('primary certification');
   }
 
-  function hasSubs(primary) {
-    return primary.subs.length > 0
+  function renderSubSelect(target, selectId, callback, options) {
+
+    const select = d3.select(target)
+      .classed('form-group', true)
+      .append('select')
+        .classed('form-control form-control-sm', true)
+        .attr('id', selectId)
+        .on('change', callback)
+
+    select.selectAll('option')
+      .data(options)
+      .enter()
+      .append('option')
+        .attr('value', d => d.value)
+        .text(d => d.text)
+
+  }
+
+  /**
+   * @param d3.selection group
+   * @param string labelText
+   *
+   */
+  function addSelectLabel(group, labelText, extra) {
   }
 
   function setScene(scene) {
-    scene.data.forEach(item => {
-      setupDonut(item.type, item.title, item.earned, item.required)
+    scene.data.forEach(donut => {
+      //setupDonut(donut.type, donut.title, donut.earned, donut.required)
+      setupDonut(donut)
     })
-  }
-
-  function flipScene(newScene) {
-
-    console.dir(newScene);
-
   }
 
   /**
    * @param object data
    * @return
    */
-  function setupUi(data) {
-
-    const genTotal = data.general.earned;
-
-    // TODO we're just grabbing a temp value for now
-    const primary = data.primaries[0]
-
-    setupDonut('general', 'General', data.general.earned, GENERAL_RECOMMENDATION)
-
-    const donutTitle = hasSubs(primary) ? null : primary.desc
-    setupDonut('primary', donutTitle, primary.earned, primary.required)
-
-    if (! data.primaries) {
-  
-      // TODO ideal API?
-      //const general = new Progress(data.general.earned, GENERAL_RECOMMENDATION)
-      //general.render()
-
-    } else {
-
-      // render Primary select
-      renderSelect(
-        '.cme-select',
-        'select-primary',
-        handlePrimarySelectChange,
-        data.primaries.map(primary => {
-          return {
-            value: primary.desc,
-            text: primary.desc
-          }
-        })
-      )
-
-      // TODO
-      // render Subs select
-      if (hasSubs(primary)) {
-        const subSelectItems = 
-          [
-            { value: primary.desc, text: primary.desc }, 
-            ...primary.subs.map(sub => { 
-              return { 
-                value: sub.desc, 
-                text: sub.desc } 
-              }
-            )
-          ]
-
-        renderSelect(
-          '#primary',
-          'select-sub',
-          () => console.log('sub change'),
-          subSelectItems
-        )
-      }
-    }
-  }
+//  function setupUi(data) {
+//
+//    const genTotal = data.general.earned;
+//
+//    // TODO we're just grabbing a temp value for now
+//    const primary = data.primaries[0]
+//
+//    setupDonut('general', 'General', data.general.earned, GENERAL_RECOMMENDATION)
+//
+//    const donutTitle = hasSubs(primary) ? null : primary.desc
+//    setupDonut('primary', donutTitle, primary.earned, primary.required)
+//
+//    if (! data.primaries) {
+//  
+//      // TODO ideal API?
+//      //const general = new Progress(data.general.earned, GENERAL_RECOMMENDATION)
+//      //general.render()
+//
+//    } else {
+//
+//      // render Primary select
+//      renderSelect(
+//        '.cme-select',
+//        'select-primary',
+//        handlePrimarySelectChange,
+//        data.primaries.map(primary => {
+//          return {
+//            value: primary.desc,
+//            text: primary.desc
+//          }
+//        })
+//      )
+//
+//      // TODO
+//      // render Subs select
+//      if (hasSubs(primary)) {
+//        const subSelectItems = 
+//          [
+//            { value: primary.desc, text: primary.desc }, 
+//            ...primary.subs.map(sub => { 
+//              return { 
+//                value: sub.desc, 
+//                text: sub.desc } 
+//              }
+//            )
+//          ]
+//
+//        renderSelect(
+//          '#primary',
+//          'select-sub',
+//          () => console.log('sub change'),
+//          subSelectItems
+//        )
+//      }
+//    }
+//  }
 
   function animateCount(maxCount, selector, duration) {
 
@@ -367,7 +403,7 @@
 
     setupScenes(data)
 
-    renderSelect(
+    renderPrimarySelect(
       '.cme-select',
       'select-primary',
       handlePrimarySelectChange,
@@ -433,7 +469,8 @@
       const cat1a = newScene.data.filter(item => item.type === 'cat1a')[0]
       // fetch cat1a data and setup donut
       if (cat1a) {
-        setupDonut(cat1a.type, cat1a.title, cat1a.earned, cat1a.required, true)
+        //setupDonut(cat1a.type, cat1a.title, cat1a.earned, cat1a.required, true)
+        setupDonut(cat1a, true);
       }
     } else if (! newSceneHasCat1a && alreadyHaveCat1aElem) {
       $('#cat1a').parent().remove()
