@@ -57,14 +57,19 @@ body {
 }
 
 .dbviz__title {
-  margin-bottom: 1.5rem;
+  /*margin-bottom: 1.5rem;*/
+  margin-bottom: 3.6rem;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-weight: 200;
+  font-weight: 600;
   line-height: 1.4;
-  color: #888;
+  color: #555;
   
+}
+
+.title-alt {
+  margin-bottom: .625rem;
 }
 
 .dbviz__tail {
@@ -100,6 +105,21 @@ body {
   color: #888;
 }
 
+.dbviz__req {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  font-size: 28px;
+  line-height: 1.5;
+  font-weight: 400;
+  border-radius: 50%;
+  color: white;
+  background-color: #555;
+}
+
 #cme > .col:not(:last-child):after {
   content: "";
   position: absolute;
@@ -109,3 +129,5 @@ body {
   width: 1px;
   background-color: #d0d0d0;
 }
+
+

@@ -1,3 +1,7 @@
+// TODO Much refactoring!
+// TODO Much refactoring!
+// TODO Much refactoring!
+
 /**
  * @see http://bl.ocks.org/mbostock/5100636
  *
@@ -166,7 +170,7 @@
     const html = `
       <div class="col text-center p-4" style="">
         <div class="dbviz__container" id="${donutElemId}">
-          ${subs ? '<div class="dbviz__title" id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
+          ${subs ? '<h6 class="dbviz__title title-alt">Certification</h6><div id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
           <div class="dbviz">
             <h4 class="dbviz__count">
               <span class="head">0.0</span> <span class="tail">earned</span>
@@ -490,6 +494,11 @@
     // 3. Update primary
     const primary = newScene.data.filter(item => item.type === 'primary')[0];
 
+    $(`#primary .dbviz__title`)
+      //.text(newScene.title)
+      .text('Certification')
+      .removeClass('title-alt')
+
     if (primary.subs.length > 0) {
       const subSelectItems = [
         { value: primary.title, text: primary.title },
@@ -501,6 +510,9 @@
         })
       ];
 
+      $(`#primary .dbviz__title`)
+        .addClass('title-alt')
+
       renderSubSelect(
         '#subSelect',
         'select-sub',
@@ -508,7 +520,7 @@
         subSelectItems
       );
     } else {
-      $(`#primary .dbviz__title`).text(newScene.title)
+      $('#subSelect > select').remove();
     }
 
     if (primary) {
