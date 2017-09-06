@@ -91,6 +91,12 @@ body {
   
 }
 
+.dbviz__title:after {
+  content: " requirements";
+  font-weight: 200;
+  color: #888;
+}
+
 .title-alt {
   margin-bottom: .625rem;
 }
