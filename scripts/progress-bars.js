@@ -60,6 +60,10 @@
   const tau = Math.PI * 2;
   const startAngle = 0
 
+  const colorScale = d3.scaleQuantize()
+    .domain([0, tau])
+    .range(['#f8333c', '#ffd400', '#49c349'])
+
   // Curried - it's ready to accept an object with an endAngle property
   // to compute the path of an arc
   const arc = d3.arc()
@@ -229,6 +233,7 @@
     const background = g.append('path')
       .classed('background', true)
       .datum({endAngle: tau})
+      .attr('fill', '#ffffff')
       .attr('fill', '#d0d0d0')
       .attr('d', arc)
 
@@ -238,7 +243,7 @@
       .attr('fill', 'orange')
       .attr('d', arc)
 
-    updateProgressBar({ earned, required }, foreground)
+    updateProgressBar({ earned, required }, foreground, background)
     const countSelector = `${selector} .dbviz__count > .head`
     animateCount(earned, countSelector, COUNT_ANIMATION_DURATION)
 
@@ -467,7 +472,7 @@
     // 1. Update general
     const general = newScene.data.filter(item => item.type === 'general')[0];
     if (general) {
-      updateProgressBar(general, d3.select(`#general svg path.foreground`));
+      updateProgressBar(general, d3.select(`#general svg path.foreground`), d3.select('#general svg path.background'));
     }
     animateCount(general.earned, 
                  `#general .dbviz__count > .head`,
@@ -524,7 +529,7 @@
     }
 
     if (primary) {
-      updateProgressBar(primary, d3.select(`#primary svg path.foreground`));
+      updateProgressBar(primary, d3.select(`#primary svg path.foreground`), d3.select('#primary svg path.background'));
     }
     animateCount(primary.earned, 
                  `#primary .dbviz__count > .head`,
@@ -570,7 +575,7 @@
       newDonut = { earned: data.earned, required: data.required };
     }
 
-    updateProgressBar(newDonut, d3.select(`#primary svg path.foreground`));
+    updateProgressBar(newDonut, d3.select(`#primary svg path.foreground`), d3.select('#primary svg path.background'));
 
     animateCount(newDonut.earned, 
                  `#primary .dbviz__count > .head`,
@@ -585,17 +590,29 @@
    * @param object facet - required properties: earned, required
    * @return void
    */
-  function updateProgressBar({ earned, required }, foreground) {
-    
+  function updateProgressBar({ earned, required }, foreground, background) {
+
+    const fgColor = colorScale((earned / required) * tau);
+
     // Reset donut to 0.0, so it always sweeps forward
     foreground
       .datum({endAngle: startAngle * tau})
-      .attr('d', arc);
+      .attr('d', arc)
+      .attr('fill', '#ffffff')
+
+    background.transition()
+      .attr('fill', '#ffffff')
 
     foreground.transition()
       .duration(750)
       .ease(d3.easeQuadOut)
+      .attr('fill', fgColor)
       .attrTween('d', arcTween((earned / required) * tau));
+
+
+    background.transition()
+      .attr('fill', fgColor)
+      .style('opacity', '.2')
   }
   
   d3.json('./../data/wrangled-3.json', function(err, data) {
