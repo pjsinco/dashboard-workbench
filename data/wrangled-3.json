@@ -7,14 +7,14 @@
   "primaries": [
     {
       "desc": "Radiology",
-      "earned": 1.5,
-      "required": 27.0,
+      "earned": 15.5,
+      "required": 50.0,
       "generalRequired": 96.0,
       "cat1aRequired": 0.0,
       "subs": [
         {
           "desc": "Radiation Therapy",
-          "earned": 0.0,
+          "earned": 11.5,
           "required": 13.0
         }
       ]

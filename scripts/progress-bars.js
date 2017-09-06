@@ -17,6 +17,7 @@
   let dataset
   let currentPrimary
 
+  let currentScene
   const scenes = []
   // Example
   // [
@@ -165,7 +166,7 @@
     const html = `
       <div class="col text-center p-4" style="">
         <div class="dbviz__container" id="${donutElemId}">
-          ${subs ? '<div id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
+          ${subs ? '<div class="dbviz__title" id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
           <div class="dbviz">
             <h4 class="dbviz__count">
               <span class="head">0.0</span> <span class="tail">earned</span>
@@ -203,8 +204,8 @@
       renderSubSelect(
         '#subSelect',
         'select-sub',
-        //handleSubSelectChange,
-        () => console.log('sub-select-change'),
+        handleSubSelectChange,
+        //() => console.log('sub-select-change'),
         subSelectItems
       );
     }
@@ -249,8 +250,7 @@
    *
    * TODO Do we need to use d3 for this? Maybe can use JS or JQuery instead
    */
-  function renderPrimarySelect(target, selectId, callback, options) {
-
+  function renderPrimarySelect(target, selectId, callback, options, selected) { 
 //<div class="mb-4 specialty-select" style="text-align: center;">
   //<select class="form-control form-control-sm" id="select-primary">
     //<option value="Radiology">Radiology</option>
@@ -279,6 +279,7 @@
       .enter()
       .append('option')
         .attr('value', d => d.text)
+        //.attr('selected', d => d.text === selected)
         .text(d => d.text)
 
     group.append('label')
@@ -288,6 +289,10 @@
   }
 
   function renderSubSelect(target, selectId, callback, options) {
+
+    // Remove any existing <select> element
+    d3.select(target).select('select').remove();
+    d3.select(target).text('');
 
     const select = d3.select(target)
       .classed('form-group', true)
@@ -413,9 +418,12 @@
           text: primary.desc
         }
       })
+      
     )
 
-    setScene(scenes[0])
+    currentScene = scenes[0];
+
+    setScene(currentScene)
     //updateUi(scenes[0])
     //renderScene(scenes[0])
     //setupUi(dataset)
@@ -443,6 +451,8 @@
 
     const newScene = scenes.filter(scene => scene.title === d3.event.target.value)[0]
     if (!newScene) return;
+
+    currentScene = newScene;
 
     const donutElemId = d3.event.target.id.split('-')[1];
     //const selector = `.dbviz__container#${donutElemId}`
@@ -475,11 +485,32 @@
     } else if (! newSceneHasCat1a && alreadyHaveCat1aElem) {
       $('#cat1a').parent().remove()
     }
-    
+
     // TODO
     // 3. Update primary
-    $(`#primary .dbviz__title`).text(newScene.title)
     const primary = newScene.data.filter(item => item.type === 'primary')[0];
+
+    if (primary.subs.length > 0) {
+      const subSelectItems = [
+        { value: primary.title, text: primary.title },
+        ...primary.subs.map(sub => {
+          return {
+            value: sub.title,
+            text: sub.title,
+          }
+        })
+      ];
+
+      renderSubSelect(
+        '#subSelect',
+        'select-sub',
+        handleSubSelectChange,
+        subSelectItems
+      );
+    } else {
+      $(`#primary .dbviz__title`).text(newScene.title)
+    }
+
     if (primary) {
       updateProgressBar(primary, d3.select(`#primary svg path.foreground`));
     }
@@ -490,6 +521,7 @@
     $('#primary .required .head').text(primary.required);
 
 
+    
     //const data = scenes.filter(scene => scene.filterprimary.title === newPrimary)
     //console.dir(data);
 
@@ -510,6 +542,31 @@
 //    $(selector + ' .dbviz__title').text(dataPrimary.desc)
 //    const togo = Math.max((dataPrimary.required - dataPrimary.earned), 0).toFixed(1) 
 //    $(selector + ' .togo .head').text(togo)
+  }
+  
+  function handleSubSelectChange() {
+    const primary = currentScene.data.filter(item => item.type === 'primary')[0];
+    let newDonut = {}
+
+    if (!primary) return;
+
+    if (d3.event.target.value === primary.title) {
+      newDonut = { earned: primary.earned, required: primary.required };
+    } else {
+      const data = primary.subs.filter(item => item.title === d3.event.target.value)[0];
+      if (!data) return;
+      newDonut = { earned: data.earned, required: data.required };
+    }
+
+    updateProgressBar(newDonut, d3.select(`#primary svg path.foreground`));
+
+    animateCount(newDonut.earned, 
+                 `#primary .dbviz__count > .head`,
+                 COUNT_ANIMATION_DURATION);
+
+    const specialtyTogo = togo(newDonut);
+    $('#primary .creditsTogo .head').text(specialtyTogo);
+    $('#primary .required .head').text(newDonut.required);
   }
 
   /**
