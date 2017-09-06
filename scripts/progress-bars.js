@@ -245,6 +245,7 @@
 
     updateProgressBar({ earned, required }, foreground, background)
     const countSelector = `${selector} .dbviz__count > .head`
+    colorCount(colorScale((earned / required) * tau), countSelector)
     animateCount(earned, countSelector, COUNT_ANIMATION_DURATION)
 
   }
@@ -395,6 +396,10 @@
 //    }
 //  }
 
+  function colorCount(color, selector) {
+    $(selector).css('color', color);
+  }
+
   function animateCount(maxCount, selector, duration) {
 
     $(selector).animateNumber({ 
@@ -474,8 +479,9 @@
     if (general) {
       updateProgressBar(general, d3.select(`#general svg path.foreground`), d3.select('#general svg path.background'));
     }
+    colorCount(colorScale((general.earned / general.required) * tau), '#general .dbviz__count > .head');
     animateCount(general.earned, 
-                 `#general .dbviz__count > .head`,
+                 '#general .dbviz__count > .head',
                  COUNT_ANIMATION_DURATION);
     const generalTogo = togo(general);
     $('#general .creditsTogo .head').text(generalTogo);
@@ -531,8 +537,9 @@
     if (primary) {
       updateProgressBar(primary, d3.select(`#primary svg path.foreground`), d3.select('#primary svg path.background'));
     }
+    colorCount(colorScale((primary.earned / primary.required) * tau), '#primary .dbviz__count > .head');
     animateCount(primary.earned, 
-                 `#primary .dbviz__count > .head`,
+                 '#primary .dbviz__count > .head',
                  COUNT_ANIMATION_DURATION);
     $('#primary .creditsTogo .head').text(togo(primary));
     $('#primary .required .head').text(primary.required);
@@ -577,8 +584,9 @@
 
     updateProgressBar(newDonut, d3.select(`#primary svg path.foreground`), d3.select('#primary svg path.background'));
 
+    colorCount(colorScale((newDonut.earned / newDonut.required) * tau), '#primary .dbviz__count > .head');
     animateCount(newDonut.earned, 
-                 `#primary .dbviz__count > .head`,
+                 '#primary .dbviz__count > .head',
                  COUNT_ANIMATION_DURATION);
 
     const specialtyTogo = togo(newDonut);
