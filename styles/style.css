@@ -120,7 +120,8 @@ body {
   letter-spacing: 1px;
 }
 
-.dbviz__tail .required {
+.creditsTogo .tail,
+.required {
   font-weight: 200;
   text-transform: uppercase;
   font-size: .85rem;
@@ -153,4 +154,10 @@ body {
   background-color: #d0d0d0;
 }
 
-
+.creditsTogo .head {
+    display: block;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #555;
+}

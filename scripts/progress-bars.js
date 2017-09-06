@@ -1,6 +1,6 @@
 // TODO Much refactoring!
-// TODO Much refactoring!
-// TODO Much refactoring!
+// TODO Much refactoring!!
+// TODO Much refactoring!!!!!!
 
 /**
  * @see http://bl.ocks.org/mbostock/5100636
@@ -200,11 +200,12 @@
   
     if (subs) {
       const subSelectItems = [
-        { value: title, text: title },
+        { value: title, text: title, required  },
         ...subs.map(sub => {
           return {
             value: sub.title,
             text: sub.title,
+            required: sub.required,
           }
         })
       ];
@@ -316,7 +317,10 @@
       .enter()
       .append('option')
         .attr('value', d => d.value)
-        .text(d => d.text)
+        .text(d => {
+          //return `${d.text} - ${d.required} credits required`
+          return d.text
+        })
 
   }
 
@@ -334,67 +338,6 @@
       setupDonut(donut)
     })
   }
-
-  /**
-   * @param object data
-   * @return
-   */
-//  function setupUi(data) {
-//
-//    const genTotal = data.general.earned;
-//
-//    // TODO we're just grabbing a temp value for now
-//    const primary = data.primaries[0]
-//
-//    setupDonut('general', 'General', data.general.earned, GENERAL_RECOMMENDATION)
-//
-//    const donutTitle = hasSubs(primary) ? null : primary.desc
-//    setupDonut('primary', donutTitle, primary.earned, primary.required)
-//
-//    if (! data.primaries) {
-//  
-//      // TODO ideal API?
-//      //const general = new Progress(data.general.earned, GENERAL_RECOMMENDATION)
-//      //general.render()
-//
-//    } else {
-//
-//      // render Primary select
-//      renderSelect(
-//        '.cme-select',
-//        'select-primary',
-//        handlePrimarySelectChange,
-//        data.primaries.map(primary => {
-//          return {
-//            value: primary.desc,
-//            text: primary.desc
-//          }
-//        })
-//      )
-//
-//      // TODO
-//      // render Subs select
-//      if (hasSubs(primary)) {
-//        const subSelectItems = 
-//          [
-//            { value: primary.desc, text: primary.desc }, 
-//            ...primary.subs.map(sub => { 
-//              return { 
-//                value: sub.desc, 
-//                text: sub.desc } 
-//              }
-//            )
-//          ]
-//
-//        renderSelect(
-//          '#primary',
-//          'select-sub',
-//          () => console.log('sub change'),
-//          subSelectItems
-//        )
-//      }
-//    }
-//  }
 
   function colorCount(color, selector) {
     $(selector).css('color', color);
@@ -512,11 +455,12 @@
 
     if (primary.subs.length > 0) {
       const subSelectItems = [
-        { value: primary.title, text: primary.title },
+        { value: primary.title, text: primary.title, required: primary.required },
         ...primary.subs.map(sub => {
           return {
             value: sub.title,
             text: sub.title,
+            required: sub.required,
           }
         })
       ];
