@@ -56,6 +56,29 @@ body {
   display: inline-block;
 }
 
+.dbviz__container:before {
+  color: #aaa;
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  font-size: 28px;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 400;
+  border-radius: 50%;
+  color: white;
+  background-color: #555;
+  content: counter(donut-counter);
+  counter-increment: donut-counter;
+}
+
+#cme {
+  counter-reset: donut-counter;
+}
+
 .dbviz__title {
   /*margin-bottom: 1.5rem;*/
   margin-bottom: 3.6rem;

@@ -174,7 +174,7 @@
     const html = `
       <div class="col text-center p-4" style="">
         <div class="dbviz__container" id="${donutElemId}">
-          ${subs ? '<h6 class="dbviz__title title-alt">Certification</h6><div id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
+          ${subs ? '<h6 class="dbviz__title title-alt">Specialty Certification</h6><div id="subSelect"></div>': '<h6 class="dbviz__title">' + title + '</h6>'}
           <div class="dbviz">
             <h4 class="dbviz__count">
               <span class="head">0.0</span> <span class="tail">earned</span>
@@ -507,7 +507,7 @@
 
     $(`#primary .dbviz__title`)
       //.text(newScene.title)
-      .text('Certification')
+      .text('Specialty Certification')
       .removeClass('title-alt')
 
     if (primary.subs.length > 0) {
